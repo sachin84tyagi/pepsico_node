@@ -1,0 +1,598 @@
+<html>
+
+<head>
+  <title>smart shelf</title>
+
+  <link rel='stylesheet' href='https://www.w3schools.com/w3css/4/w3.css'>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .bgClass {
+      background-image: url("images/bg-color.jpg");
+      background-color: #adadad;
+      background-repeat: no-repeat;
+      background-size: cover;
+      text-align: center;
+    }
+
+    #rcorners3 {
+      border-radius: 50%;
+      background-color: #ff4141;
+      width: 23px;
+      height: 22px;
+      margin-top: 10px;
+    }
+
+    h3 {
+      font-size: 18px
+    }
+
+    #myProgress {
+      /* width: 100%;
+        background-color: #ddd; */
+
+    }
+
+    .myProgressClass {
+      margin: 7px;
+    }
+
+    .barClass {
+      /* width: 0%;
+        height: 30px;
+        background-color: #4caf50;
+        text-align: center;
+        line-height: 30px;
+        color: white; */
+      width: 0%;
+      background-color: #4caf50;
+      text-align: center;
+      line-height: 20px;
+      color: white;
+      border-radius: 0px 25px 25px 0px;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .grid {
+      display: flex;
+      /* establish flex container */
+      flex-wrap: wrap;
+      /* enable flex items to wrap */
+      justify-content: space-around;
+      /*background-color: aliceblue;*/
+      max-width: 600px;
+      align-content: center;
+      padding-top: 10px;
+      padding-left: 1px;
+      box-sizing: border-box;
+      margin: auto;
+      box-shadow: inset 0 0 0 1px white;
+
+    }
+
+    .cell {
+      flex: 0 0 160px;
+      /* don't grow, don't shrink, width */
+      /*height: 160px;*/
+      padding-top: 10px;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      background-color: #fdfdfd;
+      box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+    }
+
+    /*.cell:nth-child(3n) {
+                #background-color: #F00;
+                #}*/
+    * {
+      margin: 0;
+      padding: 0
+    }
+
+    .content {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    body {
+      text-align: center
+    }
+
+    .imdesc {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative
+    }
+
+    .imdesc img {
+      vertical-align: middle
+    }
+
+    .imdesc p {
+      text-align: center;
+      background: #fc0
+    }
+
+    .imdesc p.txt {
+      position: absolute;
+      top: 310px;
+      left: 40px;
+      font-size: 18px !important;
+      width: 170px;
+      padding: 5px;
+      background-color: white;
+      border: 1px solid orange;
+    }
+
+    #progressbar {
+      background-color: black;
+      border-radius: 13px;
+      padding: 3px
+    }
+
+    #progressbar>div {
+      background-color: orange;
+      width: 80%;
+      height: 20px;
+      border-radius: 10px
+    }
+
+    .meter {
+      display: block;
+      height: 100%;
+      background-color: rgb(43, 194, 83);
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden
+    }
+
+    .vmeter {
+      display: block;
+      width: 100%;
+      background-color: rgb(43, 194, 83);
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden
+    }
+  </style>
+
+
+
+</head>
+
+<body class="bgClass">
+
+  <div class="content">
+    <div class="logo">
+      <img src="images/pepsico_logo.png" height="120" width="170" />
+    </div>
+    <h1>ShelfAware Inventory Status</h1>
+
+    <hr />
+
+    <div class="input-group">
+      <select class="custom-select" id="rackOption" onchange="changeRack()">
+        <option selected>Please select an option...</option>
+        <option value="001">Rack_001</option>
+        <option value="002">Rack_002</option>
+        <option value="003">Rack_003</option>
+        <option value="004">Rack_004</option>
+        <option value="005">Rack_005</option>
+      </select>
+
+    </div>
+
+    <hr />
+    <div id="grid">
+
+    </div>
+
+
+    <div style="width: 180px;
+    margin: 0 auto; margin-bottom: 10px; overflow: hidden;">
+      <div style="float:left;" id="rcorners3"></div>
+      <h3 style="color:#1f0e84d9;
+    margin-top: 11px;
+    float: right;">
+        Connection Status
+      </h3>
+    </div>
+    <div id="historyData"></div>
+  </div>
+
+
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+<script>
+
+  //
+  var globalId = "";
+  var elem_init = document.querySelectorAll(
+    "#myBar11, #myBar12, #myBar13, #myBar21, #myBar22, #myBar23, #myBar31, #myBar32, #myBar33"
+  );
+  for (var i = 0; i < elem_init.length; i++) {
+    elem_init[i].style.margin = "0px auto";
+    elem_init[i].style.color = "#000";
+    elem_init[i].style.width = "0%";
+    elem_init[i].innerHTML = "0%";
+  }
+  var x = document.getElementById("historyData");
+  x.style.display = "none";
+
+  $(document).ready(function () {
+    //document.getElementById("rcorners3").style.background = "red";
+
+    var ws = new WebSocket("ws://" + location.host);
+    //http://pepsicowebapp.azurewebsites.net/
+    ws.onopen = function () {
+      console.log("Successfully connect WebSocket");
+    };
+    ws.onmessage = function (message) {
+      console.log("MEssage--------", message);
+
+      //Add code here
+      document.getElementById("rcorners3").style.background = "#05ea42";
+
+      var MyBlob = new Blob([message.data], { type: 'text/plain' });
+      console.log(MyBlob instanceof Blob)
+
+      if (message.data.length <= 4) {
+        console.log("Message Type is blob..........");
+        document.getElementById("historyData").innerHTML = "No record found.";
+        window.scrollTo(0, document.body.scrollHeight);
+        return;
+      }
+      var bodyData = JSON.parse(message.data);
+      var items = [bodyData];
+
+      // var properties = JSON.parse(message.data).properties
+
+      // console.log("properties message--- html--", JSON.parse(message.data) );
+      if (bodyData.startsWith("sku:", 0)) {
+        console.log("bodyData.split(':')[1]", bodyData.split(":")[1]);
+        document.getElementById("fimg" + bodyData.split(":")[1]).src =
+          "images/" + bodyData.split(":")[2];
+      } else {
+        console.log("message 121212", bodyData);
+        let indexing = bodyData.split(",")[0];
+        console.log("indexing ::::::::::", indexing);
+
+
+        var rackIdPos = indexing.indexOf('rackid');
+        if (rackIdPos > 0) {
+          console.log("rackId : ", rackIdPos);
+          // console.log("bodyData : ", items);
+          // const rawtableData = JSON.parse(items[0]);
+          const rawtableData = JSON.parse(bodyData);
+
+          console.log("rawtableData :::::::::::::", rawtableData);
+
+          const picked = (({ datetime, percentage }) => ({ datetime, percentage }))(rawtableData);
+          var tableData = [picked];
+          console.log(message.data.length);
+          if (typeof (message.data) === "string") {
+            console.log(rawtableData)
+            //console.log("displayTable :::::::", displayTable)
+            //var record_indexing = parseInt(rawtableData[rawtableData.length-1].rackid);
+            var record_indexing = parseInt(rawtableData[0].rackid);
+            //var record_productVal = parseInt(rawtableData[rawtableData.length-1].percentage);
+            var record_productVal = parseInt(rawtableData[0].percentage);
+            setDefaultStatus(record_productVal, record_indexing);
+
+            //generateTable(tableData);
+            console.log("generateTable ::::::::::::::::: Data", typeof (bodyData))
+            generateTable(rawtableData);
+          } else {
+
+          }
+        }
+
+        //
+        console.log("indexing", indexing);
+        console.log("bodyData Length::::", bodyData.length);
+
+        if (bodyData.length <= 6) {
+          console.log("bodyData Type::::", typeof bodyData)
+          let productVal = parseFloat(bodyData.split(",")[1]);
+          //console.log("productValproductVal", productVal);
+          //productVal = 20;
+
+          // $("h1").text(`Asure:`);
+          console.log("items.length", items.length);
+
+          if (items.length > 0 && productVal <= 100) {
+            var html = "";
+            var elem = document.getElementById("myBar" + indexing);
+            elem.style.color = "#FFF";
+            elem.style.marginLeft = "0px";
+            console.log("mybar element", elem);
+
+            elem.style.width = productVal + "%";
+            elem.innerHTML = productVal * 1 + "%";
+          } else {
+            console.log("FIXED DATA");
+            //var elem = document.getElementById("myBar" + indexing);
+            //elem.style.color = "#000";
+            //elem.style.width = productVal + "%";
+            //elem.innerHTML = productVal * 1 + "%";
+            // DO some code here
+          }
+
+          if (productVal === 0) {
+            console.log("There is no item here.......");
+            var elem_reset = document.getElementById("myBar" + indexing);
+            elem_reset.style.margin = "0px auto";
+            elem_reset.style.color = "#000";
+            elem_reset.style.width = "0%";
+            elem_reset.innerHTML = "0%";
+          }
+        } else {
+          console.log("indexing", indexing);
+          indexing = indexing.split(":")[1];
+          indexing = parseInt(indexing.replace(/['"]+/g, ''));
+          console.log("Indexing 222 :::::: ", indexing)
+          console.log(bodyData)
+          //let productVal = parseFloat(bodyData.split(",")[1]);
+          var productValString = bodyData.split(",")[1];
+          var productVal = productValString.split(":")[1];
+          productVal = parseInt(productVal.replace(/['"]+/g, ''));
+
+          //console.log("productValproductVal ::::::", productVal);
+          //productVal = 20;
+
+          // $("h1").text(`Asure:`);
+          console.log("items.length", items.length);
+
+          if (items.length > 0 && productVal <= 100 && productVal > 0) {
+            var html = "";
+            var elem = document.getElementById("myBar" + indexing);
+            elem.style.color = "#FFF";
+            elem.style.marginLeft = "0px";
+            console.log("mybar element", elem);
+
+            elem.style.width = productVal + "%";
+            elem.innerHTML = productVal * 1 + "%";
+          } else {
+
+            //var elem = document.getElementById("myBar" + indexing);
+            //elem.style.color = "#000";
+            //elem.style.width = productVal + "%";
+            //elem.innerHTML = productVal * 1 + "%";
+            // DO some code here
+          }
+
+          if (productVal === 0) {
+            console.log("There is no item here.......myBar" + indexing);
+            var elem_reset = document.getElementById("myBar" + indexing);
+            console.log("elem_reset", elem_reset);
+            elem_reset.style.margin = "0px auto";
+            elem_reset.style.color = "#000";
+            elem_reset.style.width = "0%";
+            elem_reset.innerHTML = "0%";
+          }
+        }
+
+      }
+    };
+
+
+  });
+
+
+  function jsUcfirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  //Div Hide and Show
+  function displayTransactionHistoryDetails(id) {
+    x.style.display = "block";
+    postAjax('/', 'id=' + id, function (data) {
+    });
+  }
+
+  function displayDefaultPercentageDetail(id) {
+    //var displayTable = false;
+    postAjax('/', 'id=' + id, function (data) {
+    });
+  }
+
+  function generateTable(data) {
+    window.scrollTo(0, document.body.scrollHeight);
+    // EXTRACT VALUE FOR HTML HEADER. 
+    // ('Book ID', 'Book Name', 'Category' and 'Price')
+    var col = [];
+
+    for (var i = 0; i < data.length; i++) {
+      for (var key in data[i]) {
+        if (col.indexOf(key) === -1) {
+          if ("datetime" === key || "percentage" === key) {
+            col.push(key);
+          }
+        }
+      }
+    }
+
+    // CREATE DYNAMIC TABLE.
+    var table = document.createElement("table");
+    table.setAttribute('id', 'customers');
+
+
+    // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+    var tr = table.insertRow(-1);                   // TABLE ROW.
+
+    for (var i = 0; i < col.length; i++) {
+      var th = document.createElement("th");      // TABLE HEADER.
+      th.innerHTML = jsUcfirst(col[i]);
+      tr.appendChild(th);
+    }
+
+    // ADD JSON DATA TO THE TABLE AS ROWS.
+    for (var i = 0; i < data.length; i++) {
+
+      tr = table.insertRow(-1);
+
+      for (var j = 0; j < col.length; j++) {
+        var tabCell = tr.insertCell(-1);
+
+        if ("datetime" === col[j] || "percentage" === col[j]) {
+          if ("datetime" === col[j]) {
+            tabCell.innerHTML = new Date(data[i][col[j]]).toUTCString();
+
+          } else {
+            tabCell.innerHTML = data[i][col[j]];
+          }
+        }
+      }
+    }
+
+    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+    var divContainer = document.getElementById("historyData");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(table);
+  }
+
+
+  function postAjax(url, data, success) {
+    var params = typeof data == 'string' ? data : Object.keys(data).map(
+      function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
+    ).join('&');
+
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    xhr.open('POST', url);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState > 3 && xhr.status == 200) { success(xhr.responseText); }
+    };
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    return xhr;
+  }
+  displayDefaultPercentageDetail(11);
+  displayDefaultPercentageDetail(12);
+  displayDefaultPercentageDetail(13);
+  displayDefaultPercentageDetail(21);
+  displayDefaultPercentageDetail(22);
+  displayDefaultPercentageDetail(23);
+  displayDefaultPercentageDetail(31);
+  displayDefaultPercentageDetail(32);
+  displayDefaultPercentageDetail(33);
+
+  function setDefaultStatus(productVal, indexing) {
+    var elem = document.getElementById("myBar" + indexing);
+    elem.style.color = "#fff";
+    elem.style.marginLeft = "0px";
+    console.log("mybar element", elem);
+
+    elem.style.width = productVal + "%";
+    elem.innerHTML = productVal * 1 + "%";
+  }
+
+  function changeRack(id) {
+    var x = document.getElementById("rackOption").value;
+    document.getElementById("grid").innerHTML = `<div class="grid">
+      <div class="cell">
+        <img id='fimg11' src='images/Cheetos Crunchy.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress11">
+          <div id="myBar11" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(11)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i>${x}</button>
+      </div>
+      <div class="cell">
+        <img id='fimg12' src='images/Cheetos Flaming Hot.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress12">
+          <div id="myBar12" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(12)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg13' src='images/Chesters.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress13">
+          <div id="myBar13" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(13)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg21' src='images/Doritos.jpg' / height='120' width='110' />
+
+        <div class="myProgressClass" id="myProgress21">
+          <div id="myBar21" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(21)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg22' src='images/Fritos.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress22">
+          <div id="myBar22" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(22)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg23' src='images/Lays Classic.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress23">
+          <div id="myBar23" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(23)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg31' src='images/Ruffles.jpg' / height='120' width='120' />
+
+        <div class="myProgressClass" id="myProgress31">
+          <div id="myBar31" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(31)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+      <div class="cell">
+        <img id='fimg32' src='images/Doritos Crunch.jpg' / height='120' width='100' />
+
+        <div class="myProgressClass" id="myProgress32">
+          <div id="myBar32" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(32)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+
+      <div class="cell">
+        <img id='fimg33' src='images/SmartFood.jpg' / height='120' width='100' />
+        <div class="myProgressClass" id="myProgress33">
+          <div id="myBar33" class="barClass progress-bar progress-bar-striped"></div>
+        </div>
+        <button onclick="displayTransactionHistoryDetails(33)" class="button" style="margin-bottom: 3px"
+          title="Click to see Transaction History"><i class="fa fa-history" aria-hidden="true"></i></button>
+      </div>
+    </div>`;
+  }
+
+  function getRackDetailsFromDB(id) {
+    postAjax('/', 'id=' + id, function (data) {
+    });
+  }
+</script>
+
+</html>
